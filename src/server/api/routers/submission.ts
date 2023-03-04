@@ -9,7 +9,7 @@ export const submissionRouter = createTRPCRouter({
         email: z.string(),
         fields: z.array(
           z.object({
-            id: z.string(),
+            fieldId: z.string(),
             value: z.string(),
           })
         ),

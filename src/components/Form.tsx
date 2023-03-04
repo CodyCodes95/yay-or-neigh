@@ -5,6 +5,8 @@ import { BsCameraFill } from "react-icons/bs";
 import Compressor from "compressorjs";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { api } from "~/utils/api";
+import toast from "react-hot-toast";
 
 type FormProps = {
   form: FormWithFields;
@@ -19,6 +21,8 @@ const Form: React.FC<FormProps> = ({ form }) => {
   const [images, setImages] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<boolean>(false);
+
+  const createSubmission = api.submission.createSubmission.useMutation();
 
   const handleImageAttach = (e: any) => {
     Array.from(e.target.files).forEach((file: any) => {
@@ -40,12 +44,30 @@ const Form: React.FC<FormProps> = ({ form }) => {
     });
   };
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
+    if (!images.length) {
+      toast.error("Please attach at least one image");
+      return;
+    }
     setIsLoading(true);
+    const email = data.email;
+    console.log(email);
+    delete data.email;
+    console.log(email);
+    delete data.file;
     console.log(data);
+    const submission = await createSubmission.mutateAsync({
+      formId: form.id,
+      email: email,
+      fields: Object.entries(data).map(([key, value]) => ({
+        fieldId: key,
+        value: value as string,
+      })),
+    });
+    if (submission) {
+      setSubmitted(true);
+    }
   };
-
-  console.log(errors);
 
   if (submitted)
     return (
@@ -81,7 +103,7 @@ const Form: React.FC<FormProps> = ({ form }) => {
         switch (field.type) {
           case "text":
             return (
-              <div className="flex flex-col p-2">
+              <div key={field.id} className="flex flex-col p-2">
                 <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
                   {field.name}
                 </label>
@@ -109,9 +131,8 @@ const Form: React.FC<FormProps> = ({ form }) => {
           hidden
           id="images-input"
           accept="image/*"
-          type={"file"}
+          type="file"
           multiple
-          {...register("file", { required: true })}
           onChange={handleImageAttach}
         />
         <p className="text-white">{images.length} Images attached</p>
