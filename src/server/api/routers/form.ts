@@ -27,6 +27,9 @@ export const formRouter = createTRPCRouter({
       where: {
         userId: ctx.session.user.id,
       },
+      include: {
+        submissions: true,
+      }
     });
   }),
 });
