@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { BsCameraFill } from "react-icons/bs";
 import Compressor from "compressorjs";
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 type FormProps = {
   form: FormWithFields;
@@ -16,8 +17,8 @@ const Form: React.FC<FormProps> = ({ form }) => {
     formState: { errors },
   } = useForm();
   const [images, setImages] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [submitted, setSubmitted] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [submitted, setSubmitted] = useState<boolean>(false);
 
   const handleImageAttach = (e: any) => {
     Array.from(e.target.files).forEach((file: any) => {
@@ -40,6 +41,7 @@ const Form: React.FC<FormProps> = ({ form }) => {
   };
 
   const onSubmit = (data: any) => {
+    setIsLoading(true);
     console.log(data);
   };
 
@@ -47,11 +49,15 @@ const Form: React.FC<FormProps> = ({ form }) => {
 
   if (submitted)
     return (
-      <div>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+      >
         <p className="text-gray-500">
           Your form for {form.name} has been successfully submitted.
         </p>
-      </div>
+      </motion.div>
     );
 
   return (

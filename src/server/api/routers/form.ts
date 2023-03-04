@@ -1,7 +1,4 @@
-// use to test staff admin actions until dynamic form builder is built
-
 import { z } from "zod";
-
 import {
   createTRPCRouter,
   publicProcedure,
