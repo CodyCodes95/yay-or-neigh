@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/server/api/trpc";
 
 export const submissionRouter = createTRPCRouter({
   createSubmission: publicProcedure
@@ -26,4 +26,16 @@ export const submissionRouter = createTRPCRouter({
       });
       return submission;
     }),
+  getUnjudgedSubmissions: protectedProcedure.query(async ({ ctx }) => {
+    const submissions = await ctx.prisma.submission.findMany({
+      where: {
+        form: {
+          userId: ctx.session.user.id,
+        },
+        approved: null,
+        deferred: false
+      },
+    });
+    return submissions;
+  }
 });

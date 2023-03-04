@@ -71,7 +71,7 @@ const FormContainer: NextPage = () => {
                         Closes {getRelativeDays(form.endDate)}
                       </p>
                     </div>
-                    <div className="flex w-full justify-around">
+                    <div className="flex w-full justify-around mt-1">
                       <a href="">Judge</a>
                       <a href="">Options</a>
                       <Link target={"_blank"} href={`/forms?formId=${form.id}`}>Preview</Link>
