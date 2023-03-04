@@ -1,8 +1,9 @@
 import { type NextPage } from "next";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 import { FaListUl } from "react-icons/fa";
-import { FiGrid } from "react-icons/fi";
+import { FiGrid, FiLink } from "react-icons/fi";
 import { api } from "~/utils/api";
 import { getRelativeDays } from "~/utils/formats";
 
@@ -58,7 +59,20 @@ const FormContainer: NextPage = () => {
                   className="flex flex-col rounded-md border-2 border-[#333] bg-black"
                 >
                   <div className="flex flex-col p-3">
-                    <h4 className="text-white">{form.name}</h4>
+                    <div className="flex w-full items-center justify-between">
+                      <h4 className="text-white">{form.name}</h4>
+                      <span
+                        onClick={() => {
+                          navigator.clipboard.writeText(
+                            `${window.location.origin}/forms?formId=${form.id}`
+                          );
+                          toast.success("Copied to clipboard");
+                        }}
+                        className="cursor-pointer rounded-lg bg-[#333] p-2"
+                      >
+                        <FiLink />
+                      </span>
+                    </div>
                     <p className="p-1 text-sm">
                       {form.submissions.length} Submission
                       {form.submissions.length > 1 ? "s" : ""}
@@ -71,10 +85,12 @@ const FormContainer: NextPage = () => {
                         Closes {getRelativeDays(form.endDate)}
                       </p>
                     </div>
-                    <div className="flex w-full justify-around mt-1">
+                    <div className="mt-1 flex w-full justify-around">
                       <a href="">Judge</a>
                       <a href="">Options</a>
-                      <Link target={"_blank"} href={`/forms?formId=${form.id}`}>Preview</Link>
+                      <Link target={"_blank"} href={`/forms?formId=${form.id}`}>
+                        Preview
+                      </Link>
                     </div>
                   </div>
                 </div>
