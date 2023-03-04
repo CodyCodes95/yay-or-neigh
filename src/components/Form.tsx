@@ -16,6 +16,8 @@ const Form: React.FC<FormProps> = ({ form }) => {
     formState: { errors },
   } = useForm();
   const [images, setImages] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [submitted, setSubmitted] = useState<boolean>(true);
 
   const handleImageAttach = (e: any) => {
     Array.from(e.target.files).forEach((file: any) => {
@@ -43,8 +45,22 @@ const Form: React.FC<FormProps> = ({ form }) => {
 
   console.log(errors);
 
+  if (submitted)
+    return (
+      <div>
+        <p className="text-gray-500">
+          Your form for {form.name} has been successfully submitted.
+        </p>
+      </div>
+    );
+
   return (
     <form className="flex w-1/4 flex-col" onSubmit={handleSubmit(onSubmit)}>
+      {isLoading ? (
+        <div className="fixed left-0 top-0 flex h-screen w-screen items-center justify-center bg-[#000000c7]">
+          <div className="h-32 w-32 animate-spin rounded-full border-t-2 border-b-2 border-white"></div>
+        </div>
+      ) : null}
       <div className="flex flex-col p-2">
         <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
           Email
