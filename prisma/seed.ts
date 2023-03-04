@@ -4,7 +4,7 @@ async function seedDb() {
   const form = await prisma.form.create({
     data: {
       name: "Status Seasonal '22",
-      userId: "cletf6amz0000ehj4f4vo14d3",
+      userId: "cleu16dkv0000ehj2ohibseha",
       endDate: new Date("2023-12-31"),
     },
   });

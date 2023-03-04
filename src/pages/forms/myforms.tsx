@@ -13,7 +13,7 @@ const FormContainer: NextPage = () => {
 
   if (!myForms.data) {
     return (
-      <div className="fixed left-0 top-0 flex h-screen w-screen items-center justify-center bg-gradient-to-b from-[#15162c] to-[#04050a]">
+      <div className="fixed left-0 top-0 flex h-screen w-screen items-center justify-center bg-gradient-to-b from-[#111] to-[#04050a]">
         <div className="h-32 w-32 animate-spin rounded-full border-t-2 border-b-2 border-white"></div>
       </div>
     );
@@ -86,7 +86,7 @@ const FormContainer: NextPage = () => {
                       </p>
                     </div>
                     <div className="mt-1 flex w-full justify-around">
-                      <a href="">Judge</a>
+                      <Link href={`/forms/judge?formId=${form.id}`}>Judge</Link>
                       <a href="">Options</a>
                       <Link target={"_blank"} href={`/forms?formId=${form.id}`}>
                         Preview

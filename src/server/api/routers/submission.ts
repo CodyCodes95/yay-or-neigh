@@ -30,7 +30,7 @@ export const submissionRouter = createTRPCRouter({
       });
       return submission;
     }),
-  getUnjudgedSubmissions: protectedProcedure
+  getAllUnjudgedSubmissions: protectedProcedure
     .input(
       z.object({
         formId: z.string(),
@@ -46,6 +46,36 @@ export const submissionRouter = createTRPCRouter({
           approved: null,
           deferred: false,
         },
+        orderBy: {
+          createdAt: "asc",
+        },
+      });
+      return submissions;
+    }),
+  getUnjudgedSubmissions: protectedProcedure
+    .input(
+      z.object({
+        formId: z.string(),
+        offset: z.number(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const submissions = await ctx.prisma.submission.findFirst({
+        where: {
+          form: {
+            userId: ctx.session.user.id,
+            id: input.formId,
+          },
+          approved: null,
+          deferred: false,
+        },
+        include: {
+          Image: true,
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
+        skip: input.offset,
       });
       return submissions;
     }),
