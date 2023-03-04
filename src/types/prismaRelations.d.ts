@@ -1,7 +1,5 @@
-import { Field, Form } from "@prisma/client";
-import { UseTRPCQueryResult } from "@trpc/react-query/shared";
+import type { Field, Form } from "@prisma/client";
 
-
-type FormWithFields = UseTRPCQueryResult<(Form & {
+export type FormWithFields = (Form & {
     fields: Field[];
-}) | null>
+})

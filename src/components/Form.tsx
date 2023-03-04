@@ -5,11 +5,11 @@ import { BsCameraFill } from "react-icons/bs";
 import Compressor from "compressorjs";
 import { useState } from "react";
 
-type Props = {
+type FormProps = {
   form: FormWithFields;
 };
 
-const Form: React.FC<Props> = ({ form }) => {
+const Form: React.FC<FormProps> = ({ form }) => {
   const { register, handleSubmit } = useForm();
   const [images, setImages] = useState<string[]>([]);
 
@@ -41,15 +41,33 @@ const Form: React.FC<Props> = ({ form }) => {
     <div className="flex flex-col">
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <input {...register("email", { required: true })} placeholder="Email" />
-        <BsCameraFill className="text-3xl text-white">
-          <input
-            hidden
-            type={"file"}
-            multiple
-            {...register("file", { required: true })}
-            onChange={handleImageAttach}
-          />
-        </BsCameraFill>
+        {form.fields.map((field) => {
+          switch (field.type) {
+            case "text":
+              return (
+                <input
+                  key={field.id}
+                  {...register(field.id, { required: true })}
+                  placeholder={field.name}
+                />
+              );
+          }
+        })}
+        <BsCameraFill
+          onClick={() => {
+            document.getElementById("images-input")?.click();
+          }}
+          className="text-3xl text-white"
+        ></BsCameraFill>
+        <input
+          hidden
+          id="images-input"
+          accept="image/*"
+          type={"file"}
+          multiple
+          {...register("file", { required: true })}
+          onChange={handleImageAttach}
+        />
         <input type="submit" />
       </form>
     </div>
