@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   createTRPCRouter,
+  protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
 
@@ -18,7 +19,14 @@ export const formRouter = createTRPCRouter({
         },
         include: {
           fields: true,
-        }
+        },
       });
     }),
+  getMyForms: protectedProcedure.query(({ ctx }) => {
+    return ctx.prisma.form.findMany({
+      where: {
+        userId: ctx.session.user.id,
+      },
+    });
+  }),
 });
