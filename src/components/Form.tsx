@@ -10,7 +10,11 @@ type FormProps = {
 };
 
 const Form: React.FC<FormProps> = ({ form }) => {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const [images, setImages] = useState<string[]>([]);
 
   const handleImageAttach = (e: any) => {
@@ -37,22 +41,42 @@ const Form: React.FC<FormProps> = ({ form }) => {
     console.log(data);
   };
 
+  console.log(errors);
+
   return (
-    <div className="flex flex-col">
-      <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-        <input {...register("email", { required: true })} placeholder="Email" />
-        {form.fields.map((field) => {
-          switch (field.type) {
-            case "text":
-              return (
+    <form className="flex w-1/4 flex-col" onSubmit={handleSubmit(onSubmit)}>
+      <div className="flex flex-col p-2">
+        <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+          Email
+        </label>
+        <input
+          {...register("email", { required: true })}
+          placeholder="Email"
+          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+        />
+      </div>
+      {form.fields.map((field) => {
+        switch (field.type) {
+          case "text":
+            return (
+              <div className="flex flex-col p-2">
+                <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                  {field.name}
+                </label>
                 <input
                   key={field.id}
-                  {...register(field.id, { required: true })}
+                  {...register(field.id, { required: field.required })}
                   placeholder={field.name}
+                  className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                 />
-              );
-          }
-        })}
+                {errors[field.id] && (
+                  <span>{errors[field.id]?.message as string}</span>
+                )}
+              </div>
+            );
+        }
+      })}
+      <div className="flex justify-between p-2">
         <BsCameraFill
           onClick={() => {
             document.getElementById("images-input")?.click();
@@ -68,9 +92,13 @@ const Form: React.FC<FormProps> = ({ form }) => {
           {...register("file", { required: true })}
           onChange={handleImageAttach}
         />
-        <input type="submit" />
-      </form>
-    </div>
+        <p className="text-white">{images.length} Images attached</p>
+      </div>
+      <input
+        className="mr-2 mb-2 cursor-pointer rounded-lg border border-red-700 px-5 py-2.5 text-center text-sm font-medium text-red-700 duration-200 hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900"
+        type="submit"
+      />
+    </form>
   );
 };
 

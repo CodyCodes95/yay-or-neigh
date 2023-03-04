@@ -87,6 +87,7 @@ model Field {
     type      String
     form      Form     @relation(fields: [formId], references: [id])
     formId    String
+    required  Boolean
 }
 
 model Submission {
