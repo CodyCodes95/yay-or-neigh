@@ -52,11 +52,8 @@ const Form: React.FC<FormProps> = ({ form }) => {
     }
     setIsLoading(true);
     const email = data.email;
-    console.log(email);
     delete data.email;
-    console.log(email);
     delete data.file;
-    console.log(data);
     const submission = await createSubmission.mutateAsync({
       formId: form.id,
       email: email,
