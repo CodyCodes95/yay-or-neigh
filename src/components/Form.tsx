@@ -23,6 +23,7 @@ const Form: React.FC<FormProps> = ({ form }) => {
   const [submitted, setSubmitted] = useState<boolean>(false);
 
   const createSubmission = api.submission.createSubmission.useMutation();
+  const uploadImage = api.image.uploadSubmissionImage.useMutation();
 
   const handleImageAttach = (e: any) => {
     Array.from(e.target.files).forEach((file: any) => {
@@ -65,6 +66,13 @@ const Form: React.FC<FormProps> = ({ form }) => {
       })),
     });
     if (submission) {
+      const imagePromises = images.map(async (image: string) => {
+        return await uploadImage.mutateAsync({
+          image: image,
+          submissionId: submission.id,
+        });
+      });
+      await Promise.all(imagePromises);
       setSubmitted(true);
     }
   };
