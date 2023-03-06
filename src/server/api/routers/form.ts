@@ -32,4 +32,18 @@ export const formRouter = createTRPCRouter({
       }
     });
   }),
+  getFields: protectedProcedure
+    .input(
+      z.object({
+        formId: z.string(),
+      })
+  )
+    .query(({ ctx, input }) => {
+      return ctx.prisma.field.findMany({
+        where: {
+          formId: input.formId,
+        },
+      });
+    }
+  ),
 });

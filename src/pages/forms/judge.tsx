@@ -1,6 +1,7 @@
 import { type NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Spacer from "~/components/Spacer";
 import type { SubmissionWithImages } from "~/types/prismaRelations";
 import { api } from "~/utils/api";
 
@@ -31,6 +32,14 @@ const FormContainer: NextPage = () => {
       enabled: false,
     }
   );
+  const fields = api.form.getFields.useQuery(
+    {
+      formId: formId as string,
+    },
+    {
+      enabled: !!formId,
+    }
+  );
 
   useEffect(() => {
     if (formId) {
@@ -45,8 +54,8 @@ const FormContainer: NextPage = () => {
       submissionOne.data &&
       submissionTwo.data
     ) {
-      setCurrentSubmission(submissionOne.data);
-      setNextSubmission(submissionTwo.data);
+      setCurrentSubmission(submissionOne.data as SubmissionWithImages);
+      setNextSubmission(submissionTwo.data as SubmissionWithImages);
     }
   }, [submissionOne, submissionTwo, currentSubmission]);
 
@@ -57,19 +66,32 @@ const FormContainer: NextPage = () => {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#111] to-[#04050a]">
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-        {currentSubmission ? (
+        {currentSubmission && fields.data ? (
           <>
             <div className="flex max-h-[50vh] w-2/3 rounded-lg bg-[#333] p-4">
               <img
                 className=" max-h-[50vh] object-cover"
-                src={currentSubmission.Image[0].url}
+                src={currentSubmission.Image[0]?.url}
                 alt={`${currentSubmission?.email} Image`}
               />
-              <div className="flex w-1/2 flex-col overflow-auto">
-                <div className="flex w-full">
-                  <p className="">Email:</p>
-                  <p>{currentSubmission.email}</p>
+              <Spacer amount={2} />
+              <div className="flex w-full flex-col overflow-auto text-white">
+                <div className="flex p-2">
+                  <p className="block w-1/3 font-medium text-gray-900 dark:text-white">
+                    Email:
+                  </p>
+                  <p className="ml-2 text-gray-400">
+                    {currentSubmission.email}
+                  </p>
                 </div>
+                {currentSubmission.data.map((field) => (
+                  <div className="flex p-2" key={field.fieldId}>
+                    <p className="block w-1/3 font-medium text-gray-900 dark:text-white">
+                      {fields.data.find((x) => x.id === field.fieldId)?.name}
+                    </p>
+                    <p className="ml-2 text-gray-400">{field.value}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </>
