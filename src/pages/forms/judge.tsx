@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Spacer from "~/components/Spacer";
 import type { SubmissionWithImages } from "~/types/prismaRelations";
 import { api } from "~/utils/api";
+import useEmblaCarousel from "embla-carousel-react";
 
 const FormContainer: NextPage = () => {
   const router = useRouter();
@@ -14,6 +15,7 @@ const FormContainer: NextPage = () => {
     useState<SubmissionWithImages | null>(null);
   const [nextSubmission, setNextSubmission] =
     useState<SubmissionWithImages | null>(null);
+  const [carouselRef] = useEmblaCarousel();
   const submissionOne = api.submission.getUnjudgedSubmissions.useQuery(
     {
       formId: formId as string,
@@ -68,12 +70,19 @@ const FormContainer: NextPage = () => {
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
         {currentSubmission && fields.data ? (
           <>
-            <div className="flex max-h-[50vh] w-2/3 rounded-lg bg-[#333] p-4">
-              <img
-                className=" max-h-[50vh] object-cover"
-                src={currentSubmission.Image[0]?.url}
-                alt={`${currentSubmission?.email} Image`}
-              />
+            <div className="flex max-h-[66vh] w-2/3 rounded-lg bg-[#333] p-4">
+              <div className="embla w-2/3" ref={carouselRef}>
+                <div className="embla__container">
+                  {currentSubmission.Image.map((image) => (
+                    <img
+                      key={image.id}
+                      className=" embla__slide max-h-[50vh] object-cover"
+                      src={image.url}
+                      alt={`${currentSubmission?.email} Image`}
+                    />
+                  ))}
+                </div>
+              </div>
               <Spacer amount={2} />
               <div className="flex w-full flex-col overflow-auto text-white">
                 <div className="flex p-2">
