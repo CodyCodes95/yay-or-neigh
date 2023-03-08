@@ -1,10 +1,15 @@
 import { type NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Spacer from "~/components/Spacer";
 import type { SubmissionWithImages } from "~/types/prismaRelations";
 import { api } from "~/utils/api";
 import useEmblaCarousel from "embla-carousel-react";
+import {
+  DotButton,
+  PrevButton,
+  NextButton,
+} from "../../components/carousel/EmblaCarouselArrowsDotsButtons";
 
 const FormContainer: NextPage = () => {
   const router = useRouter();
@@ -15,7 +20,11 @@ const FormContainer: NextPage = () => {
     useState<SubmissionWithImages | null>(null);
   const [nextSubmission, setNextSubmission] =
     useState<SubmissionWithImages | null>(null);
-  const [carouselRef] = useEmblaCarousel();
+  const [carouselRef, emblaApi] = useEmblaCarousel();
+  const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
+  const [nextBtnEnabled, setNextBtnEnabled] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
   const submissionOne = api.submission.getUnjudgedSubmissions.useQuery(
     {
       formId: formId as string,
@@ -43,6 +52,34 @@ const FormContainer: NextPage = () => {
     }
   );
 
+    const scrollPrev = useCallback(
+      () => emblaApi && emblaApi.scrollPrev(),
+      [emblaApi]
+    );
+    const scrollNext = useCallback(
+      () => emblaApi && emblaApi.scrollNext(),
+      [emblaApi]
+    );
+    const scrollTo = useCallback(
+      (index: number) => emblaApi && emblaApi.scrollTo(index),
+      [emblaApi]
+    );
+  
+    const onSelect = useCallback(() => {
+      if (!emblaApi) return;
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+      setPrevBtnEnabled(emblaApi.canScrollPrev());
+      setNextBtnEnabled(emblaApi.canScrollNext());
+    }, [emblaApi, setSelectedIndex]);
+
+    useEffect(() => {
+      if (!emblaApi) return;
+      onSelect();
+      setScrollSnaps(emblaApi.scrollSnapList());
+      emblaApi.on("select", onSelect);
+      emblaApi.on("reInit", onSelect);
+    }, [emblaApi, setScrollSnaps, onSelect]);
+
   useEffect(() => {
     if (formId) {
       submissionOne.refetch();
@@ -67,10 +104,10 @@ const FormContainer: NextPage = () => {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#111] to-[#04050a]">
-      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
+      <div className="container flex flex-col items-center gap-12 px-4 py-16 ">
         {currentSubmission && fields.data ? (
           <>
-            <div className="flex max-h-[66vh] w-2/3 rounded-lg bg-[#333] p-4">
+            <div className="flex max-h-[66vh] w-3/4 items-center rounded-lg bg-[#333] p-4">
               <div className="embla w-2/3" ref={carouselRef}>
                 <div className="embla__container">
                   {currentSubmission.Image.map((image) => (
@@ -82,20 +119,26 @@ const FormContainer: NextPage = () => {
                     />
                   ))}
                 </div>
+                  <div className="relative w-full flex items-center justify-center">
+                    {scrollSnaps.map((_, index) => (
+                      <DotButton
+                        key={index}
+                        selected={index === selectedIndex}
+                        onClick={() => scrollTo(index)}
+                      />
+                    ))}
+                </div>
               </div>
               <Spacer amount={2} />
-              <div className="flex w-full flex-col overflow-auto text-white">
-                <div className="flex p-2">
-                  <p className="block w-1/3 font-medium text-gray-900 dark:text-white">
-                    Email:
-                  </p>
-                  <p className="ml-2 text-gray-400">
+              <div className="flex max-h-[66vh] w-1/2 flex-col overflow-auto text-white">
+                <div className="flex items-center justify-center p-2">
+                  <p className="ml-2 text-xl font-bold text-white">
                     {currentSubmission.email}
                   </p>
                 </div>
                 {currentSubmission.data.map((field) => (
                   <div className="flex p-2" key={field.fieldId}>
-                    <p className="block w-1/3 font-medium text-gray-900 dark:text-white">
+                    <p className="w-1/4 min-w-[25%] break-words font-medium text-gray-900 dark:text-white">
                       {fields.data.find((x) => x.id === field.fieldId)?.name}
                     </p>
                     <p className="ml-2 text-gray-400">{field.value}</p>
