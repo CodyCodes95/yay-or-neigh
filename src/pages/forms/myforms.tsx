@@ -97,7 +97,50 @@ const FormContainer: NextPage = () => {
               ))}
             </div>
           ) : (
-            <div>test</div>
+            <div className="">
+              {myForms.data?.map((form) => (
+                <div
+                  key={form.id}
+                  className="flex flex-col rounded-md border-2 border-[#333] bg-black"
+                >
+                  <div className="flex flex-col p-3">
+                    <div className="flex w-full items-center justify-between">
+                      <h4 className="text-white">{form.name}</h4>
+                      <span
+                        onClick={() => {
+                          navigator.clipboard.writeText(
+                            `${window.location.origin}/forms?formId=${form.id}`
+                          );
+                          toast.success("Copied to clipboard");
+                        }}
+                        className="cursor-pointer rounded-lg bg-[#333] p-2"
+                      >
+                        <FiLink />
+                      </span>
+                    </div>
+                    <p className="p-1 text-sm">
+                      {form.submissions.length} Submission
+                      {form.submissions.length > 1 ? "s" : ""}
+                    </p>
+                    <div className="flex w-full">
+                      <p className="p-1 text-sm">
+                        Created {getRelativeDays(form.createdAt)}
+                      </p>
+                      <p className="p-1 text-sm">
+                        Closes {getRelativeDays(form.endDate)}
+                      </p>
+                    </div>
+                    <div className="mt-1 flex w-full justify-around">
+                      <Link href={`/forms/judge?formId=${form.id}`}>Judge</Link>
+                      <a href="">Options</a>
+                      <Link target={"_blank"} href={`/forms?formId=${form.id}`}>
+                        Preview
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
         </div>
       </div>
