@@ -1,4 +1,5 @@
 import { createTRPCRouter } from "~/server/api/trpc";
+import { fieldRouter } from "./routers/field";
 import { formRouter } from "./routers/form";
 import { imageRouter } from "./routers/image";
 import { submissionRouter } from "./routers/submission";
@@ -13,6 +14,7 @@ export const appRouter = createTRPCRouter({
   form: formRouter,
   image: imageRouter,
   submission: submissionRouter,
+  fields: fieldRouter
 });
 
 // export type definition of API
