@@ -87,7 +87,9 @@ const FormContainer: NextPage = () => {
                     </div>
                     <div className="mt-1 flex w-full justify-around">
                       <Link href={`/forms/judge?formId=${form.id}`}>Judge</Link>
-                      <a href="">Options</a>
+                      <Link href={`/forms/builder?formId=${form.id}`}>
+                        Options
+                      </Link>
                       <Link target={"_blank"} href={`/forms?formId=${form.id}`}>
                         Preview
                       </Link>
@@ -132,7 +134,9 @@ const FormContainer: NextPage = () => {
                     </div>
                     <div className="mt-1 flex w-full justify-around">
                       <Link href={`/forms/judge?formId=${form.id}`}>Judge</Link>
-                      <a href="">Options</a>
+                      <Link href={`/forms/builder?formId=${form.id}`}>
+                        Options
+                      </Link>
                       <Link target={"_blank"} href={`/forms?formId=${form.id}`}>
                         Preview
                       </Link>

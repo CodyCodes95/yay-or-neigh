@@ -204,9 +204,6 @@ const FormContainer: NextPage = () => {
       refetchOnWindowFocus: false,
       onSuccess: (data) => {
         setFields(data?.fields as Field[]);
-        // setFields(
-        //   data?.fields.sort((a, b) => a.order - b.order) as Field[]
-        // );
       },
       enabled: !!formId,
     }
@@ -270,6 +267,7 @@ const FormContainer: NextPage = () => {
         formId: formId as string,
       });
     }
+    form.refetch()
   };
 
   useEffect(() => {
