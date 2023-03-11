@@ -30,6 +30,7 @@ type TemporaryField = {
   name: string;
   type: string;
   required: boolean;
+  order: number;
 };
 
 type SortableItemProps = {
@@ -250,6 +251,25 @@ const FormContainer: NextPage = () => {
   const onSave = async () => {
     const newFields = fields.filter((field) => field.id.length < 25);
     const oldFields = fields.filter((field) => field.id.length === 25);
+    if (oldFields.length) {
+      await Promise.all(
+        oldFields.map(async (field) => {
+          await updateField.mutateAsync({
+            fieldId: field.id,
+            name: field.name,
+            type: field.type,
+            required: field.required,
+            order: field.order,
+          });
+        })
+      );
+    }
+    if (newFields.length) {
+      await createFields.mutateAsync({
+        fields: newFields,
+        formId: formId as string,
+      });
+    }
   };
 
   useEffect(() => {
@@ -279,6 +299,7 @@ const FormContainer: NextPage = () => {
                   name: "My field",
                   type: "text",
                   required: false,
+                  order: fields.length,
                 },
               ]);
             }}
@@ -307,6 +328,7 @@ const FormContainer: NextPage = () => {
                   name: "My large field",
                   type: "textarea",
                   required: false,
+                  order: fields.length,
                 },
               ]);
             }}
