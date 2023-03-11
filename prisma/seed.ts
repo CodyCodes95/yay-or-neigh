@@ -15,78 +15,91 @@ async function seedDb() {
         type: "text",
         formId: form.id,
         required: true,
+        order: 0
       },
       {
         name: "Postcode",
         type: "text",
         formId: form.id,
         required: true,
+        order: 1
       },
       {
         name: "City",
         type: "text",
         formId: form.id,
         required: true,
+        order: 2
       },
       {
         name: "State",
         type: "text",
         formId: form.id,
         required: true,
+        order: 3
       },
       {
         name: "Instagram Name",
         type: "text",
         formId: form.id,
         required: true,
+        order: 4
       },
       {
         name: "Make",
         type: "text",
         formId: form.id,
         required: true,
+        order: 5
       },
       {
         name: "Model",
         type: "text",
         formId: form.id,
         required: true,
+        order: 6
       },
       {
         name: "Engine Mods",
         type: "text",
         formId: form.id,
         required: true,
+        order: 7
       },
       {
         name: "Suspension Mods",
         type: "text",
         formId: form.id,
         required: true,
+        order: 8
       },
       {
         name: "Exterior Mods",
         type: "text",
         formId: form.id,
         required: true,
+        order: 9
       },
       {
         name: "Interior Mods",
         type: "text",
         formId: form.id,
         required: true,
+        order: 10
       },
       {
         name: "Link to HD Photos",
         type: "text",
         formId: form.id,
         required: false,
+        order: 11
       },
       {
         name: "Photographer Username",
         type: "text",
         formId: form.id,
         required: false,
+        order: 12
       },
     ],
   });
