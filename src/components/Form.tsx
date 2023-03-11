@@ -100,7 +100,7 @@ const Form: React.FC<FormProps> = ({ form }) => {
         <input
           {...register("email", { required: true })}
           placeholder="Email"
-          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-[#333] dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
         />
       </div>
       {form.fields.map((field) => {
@@ -115,7 +115,7 @@ const Form: React.FC<FormProps> = ({ form }) => {
                   key={field.id}
                   {...register(field.id, { required: field.required })}
                   placeholder={field.name}
-                  className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                  className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-[#333] dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                 />
                 {errors[field.id] && (
                   <span>{errors[field.id]?.message as string}</span>
@@ -129,7 +129,7 @@ const Form: React.FC<FormProps> = ({ form }) => {
           onClick={() => {
             document.getElementById("images-input")?.click();
           }}
-          className="text-3xl text-white"
+          className="text-3xl text-white cursor-pointer hover:text-gray-200"
         ></BsCameraFill>
         <input
           hidden
