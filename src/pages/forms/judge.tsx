@@ -1,15 +1,10 @@
 import { type NextPage } from "next";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
+import ImageCarousel from "~/components/carousel/ImageCarousel";
 import Spacer from "~/components/Spacer";
 import type { SubmissionWithImages } from "~/types/prismaRelations";
 import { api } from "~/utils/api";
-import useEmblaCarousel from "embla-carousel-react";
-import {
-  DotButton,
-  PrevButton,
-  NextButton,
-} from "../../components/carousel/EmblaCarouselArrowsDotsButtons";
 
 const FormContainer: NextPage = () => {
   const router = useRouter();
@@ -20,11 +15,6 @@ const FormContainer: NextPage = () => {
     useState<SubmissionWithImages | null>(null);
   const [nextSubmission, setNextSubmission] =
     useState<SubmissionWithImages | null>(null);
-  const [carouselRef, emblaApi] = useEmblaCarousel();
-  const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
-  const [nextBtnEnabled, setNextBtnEnabled] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
   const submissionOne = api.submission.getUnjudgedSubmissions.useQuery(
     {
       formId: formId as string,
@@ -52,34 +42,6 @@ const FormContainer: NextPage = () => {
     }
   );
 
-    const scrollPrev = useCallback(
-      () => emblaApi && emblaApi.scrollPrev(),
-      [emblaApi]
-    );
-    const scrollNext = useCallback(
-      () => emblaApi && emblaApi.scrollNext(),
-      [emblaApi]
-    );
-    const scrollTo = useCallback(
-      (index: number) => emblaApi && emblaApi.scrollTo(index),
-      [emblaApi]
-    );
-  
-    const onSelect = useCallback(() => {
-      if (!emblaApi) return;
-      setSelectedIndex(emblaApi.selectedScrollSnap());
-      setPrevBtnEnabled(emblaApi.canScrollPrev());
-      setNextBtnEnabled(emblaApi.canScrollNext());
-    }, [emblaApi, setSelectedIndex]);
-
-    useEffect(() => {
-      if (!emblaApi) return;
-      onSelect();
-      setScrollSnaps(emblaApi.scrollSnapList());
-      emblaApi.on("select", onSelect);
-      emblaApi.on("reInit", onSelect);
-    }, [emblaApi, setScrollSnaps, onSelect]);
-
   useEffect(() => {
     if (formId) {
       submissionOne.refetch();
@@ -103,32 +65,12 @@ const FormContainer: NextPage = () => {
   }, [previousSubmission, currentSubmission, nextSubmission]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#111] to-[#04050a]">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#111] to-[#04050a] text-gray-500">
       <div className="container flex flex-col items-center gap-12 px-4 py-16 ">
         {currentSubmission && fields.data ? (
           <>
             <div className="flex max-h-[66vh] w-3/4 items-center rounded-lg bg-[#333] p-4">
-              <div className="embla w-2/3" ref={carouselRef}>
-                <div className="embla__container">
-                  {currentSubmission.Image.map((image) => (
-                    <img
-                      key={image.id}
-                      className=" embla__slide max-h-[50vh] object-cover"
-                      src={image.url}
-                      alt={`${currentSubmission?.email} Image`}
-                    />
-                  ))}
-                </div>
-                  <div className="relative w-full flex items-center justify-center">
-                    {scrollSnaps.map((_, index) => (
-                      <DotButton
-                        key={index}
-                        selected={index === selectedIndex}
-                        onClick={() => scrollTo(index)}
-                      />
-                    ))}
-                </div>
-              </div>
+              <ImageCarousel images={currentSubmission.Image} />
               <Spacer amount={2} />
               <div className="flex max-h-[66vh] w-1/2 flex-col overflow-auto text-white">
                 <div className="flex items-center justify-center p-2">
@@ -148,6 +90,19 @@ const FormContainer: NextPage = () => {
             </div>
           </>
         ) : null}
+        <div className=" w-1/6 justify-around flex">
+          <button className="mr-2 mb-2 rounded-lg border border-red-700 px-5 py-2.5 text-center text-sm font-medium text-red-700 hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900">
+            No
+          </button>
+          <button className="mr-2 mb-2 rounded-lg border border-green-700 px-5 py-2.5 text-center text-sm font-medium text-green-700 hover:bg-green-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-green-300 dark:border-green-500 dark:text-green-500 dark:hover:bg-green-600 dark:hover:text-white dark:focus:ring-green-800">
+            Yes
+          </button>
+        </div>
+        <div>
+          <button className="mr-2 mb-2 rounded-lg border border-gray-800 px-5 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-gray-300 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-800">
+            Defer
+          </button>
+        </div>
       </div>
     </main>
   );
