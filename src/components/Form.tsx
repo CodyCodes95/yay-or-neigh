@@ -21,6 +21,7 @@ const Form: React.FC<FormProps> = ({ form }) => {
   const [images, setImages] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [email, setEmail] = useState("");
   const [page, setPage] = useState(0);
 
   const createSubmission = api.submission.createSubmission.useMutation();
@@ -143,7 +144,10 @@ const Form: React.FC<FormProps> = ({ form }) => {
           you have any questions or concerns!
         </p>
         <Spacer amount={6} />
-        <button className="mr-2 mb-2 rounded-lg border border-red-700 px-5 py-2.5 text-center text-sm font-medium text-red-700 hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900">
+        <button
+          onClick={() => setPage(1)}
+          className="mr-2 mb-2 rounded-lg border border-red-700 px-5 py-2.5 text-center text-sm font-medium text-red-700 hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900"
+        >
           Begin
         </button>
       </motion.div>
@@ -157,9 +161,13 @@ const Form: React.FC<FormProps> = ({ form }) => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <p className="text-gray-500">
-          Your form for {form.name} has been successfully submitted.
-        </p>
+        <input
+          type="text"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter your email"
+          className="my-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-[#333] dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+        />
       </motion.div>
     );
   }
@@ -220,7 +228,7 @@ const Form: React.FC<FormProps> = ({ form }) => {
           onClick={() => {
             document.getElementById("images-input")?.click();
           }}
-          className="text-3xl text-white cursor-pointer hover:text-gray-200"
+          className="cursor-pointer text-3xl text-white hover:text-gray-200"
         ></BsCameraFill>
         <input
           hidden
