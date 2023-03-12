@@ -35,7 +35,15 @@ export const fieldRouter = createTRPCRouter({
         required: z.boolean(),
       })
     )
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
+      const field = await ctx.prisma.field.findUnique({
+        where: {
+          id: input.fieldId,
+        },
+      });
+      if (field?.userId !== ctx.session.user.id) {
+        return; //add error in here
+      }
       return ctx.prisma.field.update({
         where: {
           id: input.fieldId,
@@ -54,7 +62,15 @@ export const fieldRouter = createTRPCRouter({
         fieldId: z.string(),
       })
     )
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
+      const field = await ctx.prisma.field.findUnique({
+        where: {
+          id: input.fieldId,
+        },
+      });
+      if (field?.userId !== ctx.session.user.id) {
+        return; //add error in here
+      }
       return ctx.prisma.field.delete({
         where: {
           id: input.fieldId,
