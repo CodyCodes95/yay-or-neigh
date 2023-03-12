@@ -53,12 +53,10 @@ const Form: React.FC<FormProps> = ({ form }) => {
       return;
     }
     setIsLoading(true);
-    const email = data.email;
-    delete data.email;
     delete data.file;
     const submission = await createSubmission.mutateAsync({
       formId: form.id,
-      email: email,
+      email,
       fields: Object.entries(data).map(([key, value]) => ({
         fieldId: key,
         value: value as string,
@@ -157,6 +155,7 @@ const Form: React.FC<FormProps> = ({ form }) => {
   if (page === 1) {
     return (
       <motion.div
+        className="flex w-full flex-col items-center justify-center"
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
@@ -166,8 +165,14 @@ const Form: React.FC<FormProps> = ({ form }) => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter your email"
-          className="my-2 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-[#333] dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+          className=" w-1/5 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-[#333] dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
         />
+        <button
+          onClick={() => setPage(2)}
+          className="mt-6 rounded-lg border border-red-700 px-5 py-2.5 text-center text-sm font-medium text-red-700 hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900"
+        >
+          Next
+        </button>
       </motion.div>
     );
   }
@@ -185,6 +190,14 @@ const Form: React.FC<FormProps> = ({ form }) => {
       </motion.div>
     );
 
+  if (isLoading && page !== 2) {
+    return (
+      <div className="fixed left-0 top-0 flex h-screen w-screen items-center justify-center bg-[#000000c7]">
+        <div className="h-32 w-32 animate-spin rounded-full border-t-2 border-b-2 border-white"></div>
+      </div>
+    );
+  }
+
   return (
     <form className="flex w-1/4 flex-col" onSubmit={handleSubmit(onSubmit)}>
       {isLoading ? (
@@ -192,16 +205,6 @@ const Form: React.FC<FormProps> = ({ form }) => {
           <div className="h-32 w-32 animate-spin rounded-full border-t-2 border-b-2 border-white"></div>
         </div>
       ) : null}
-      <div className="flex flex-col p-2">
-        <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-          Email
-        </label>
-        <input
-          {...register("email", { required: true })}
-          placeholder="Email"
-          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-[#333] dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-        />
-      </div>
       {form.fields.map((field) => {
         switch (field.type) {
           case "text":
