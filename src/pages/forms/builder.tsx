@@ -296,111 +296,115 @@ const FormContainer: NextPage = () => {
 
   return (
     <main className="flex min-h-screen justify-start bg-gradient-to-b from-[#333] to-[#04050a]">
-      {/* <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 "></div> */}
-      <div className="m-12 flex w-1/4 flex-col text-gray-200">
-        <div className="flex w-full items-center">
-          <div className="mb-6 w-full border p-4 shadow-xl">
-            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-              My field
-            </label>
-            <input
-              placeholder="Text field"
-              className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-[#333] dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-            />
-          </div>
-          <button
-            onClick={() => {
-              setFields([
-                ...fields,
-                {
-                  id: getTempId(),
-                  name: "My field",
-                  type: "text",
-                  required: false,
-                  order: fields.length,
-                },
-              ]);
-            }}
-            className="ml-2 rounded-lg border border-gray-800 px-2 py-1 text-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-gray-300 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-800"
-          >
-            +
-          </button>
-        </div>
-        <div className="flex w-full items-center">
-          <div className="mb-6 h-full w-full border p-4 shadow-xl">
-            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-              Large input
-            </label>
-            <input
-              type="text"
-              placeholder="Large text field"
-              className="sm:text-md block w-full rounded-lg border border-gray-300 bg-gray-50 px-2 py-10 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-[#333] dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-            />
-          </div>
-          <button
-            onClick={() => {
-              setFields([
-                ...fields,
-                {
-                  id: getTempId(),
-                  name: "My large field",
-                  type: "textarea",
-                  required: false,
-                  order: fields.length,
-                },
-              ]);
-            }}
-            className="ml-2 rounded-lg border border-gray-800 px-2 py-1 text-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-gray-300 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-800"
-          >
-            +
-          </button>
-        </div>
-      </div>
-      <div className="flex w-full justify-center">
-        <div ref={fieldsParent} className="flex w-1/4 flex-col justify-center">
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext
-              strategy={verticalListSortingStrategy}
-              items={fields}
-            >
-              {fields?.map((field) => {
-                return (
-                  <SortableItem
-                    setFields={setFields}
-                    key={field.id}
-                    id={field.id}
-                    field={field}
-                  />
-                  // switch (field.type) {
-                  //   case "text":
-                  //     return (
-                  //       <div key={field.id} className="flex flex-col p-2">
-                  //         <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-                  //           {field.name}
-                  //         </label>
-                  //         <input
-                  //           key={field.id}
-                  //           placeholder={field.name}
-                  //           className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-[#333] dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                  //         />
-                  //       </div>
-                  //     );
-                  // }
-                );
-              })}
-            </SortableContext>
-          </DndContext>
-          <div className="mt-2 flex items-center justify-center">
+      <div className="container flex gap-12 px-4 py-16 ">
+        <div className="m-12 flex w-1/4 flex-col text-gray-200">
+          <div className="flex w-full items-center">
+            <div className="mb-6 w-full border p-4 shadow-xl">
+              <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                My field
+              </label>
+              <input
+                placeholder="Text field"
+                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-[#333] dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+              />
+            </div>
             <button
-              onClick={onSave}
-              className="rounded-lg border border-gray-800 px-5 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-gray-300 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-800"
+              onClick={() => {
+                setFields([
+                  ...fields,
+                  {
+                    id: getTempId(),
+                    name: "My field",
+                    type: "text",
+                    required: false,
+                    order: fields.length,
+                  },
+                ]);
+              }}
+              className="ml-2 rounded-lg border border-gray-800 px-2 py-1 text-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-gray-300 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-800"
             >
-              Save
+              +
             </button>
+          </div>
+          <div className="flex w-full items-center">
+            <div className="mb-6 h-full w-full border p-4 shadow-xl">
+              <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                Large input
+              </label>
+              <input
+                type="text"
+                placeholder="Large text field"
+                className="sm:text-md block w-full rounded-lg border border-gray-300 bg-gray-50 px-2 py-10 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-[#333] dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+              />
+            </div>
+            <button
+              onClick={() => {
+                setFields([
+                  ...fields,
+                  {
+                    id: getTempId(),
+                    name: "My large field",
+                    type: "textarea",
+                    required: false,
+                    order: fields.length,
+                  },
+                ]);
+              }}
+              className="ml-2 rounded-lg border border-gray-800 px-2 py-1 text-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-gray-300 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-800"
+            >
+              +
+            </button>
+          </div>
+        </div>
+        <div className="flex w-full justify-center">
+          <div
+            ref={fieldsParent}
+            className="flex w-1/2 flex-col justify-center"
+          >
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                strategy={verticalListSortingStrategy}
+                items={fields}
+              >
+                {fields?.map((field) => {
+                  return (
+                    <SortableItem
+                      setFields={setFields}
+                      key={field.id}
+                      id={field.id}
+                      field={field}
+                    />
+                    // switch (field.type) {
+                    //   case "text":
+                    //     return (
+                    //       <div key={field.id} className="flex flex-col p-2">
+                    //         <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                    //           {field.name}
+                    //         </label>
+                    //         <input
+                    //           key={field.id}
+                    //           placeholder={field.name}
+                    //           className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-[#333] dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                    //         />
+                    //       </div>
+                    //     );
+                    // }
+                  );
+                })}
+              </SortableContext>
+            </DndContext>
+            <div className="mt-2 flex items-center justify-center">
+              <button
+                onClick={onSave}
+                className="rounded-lg border border-gray-800 px-5 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-gray-300 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-800"
+              >
+                Save
+              </button>
+            </div>
           </div>
         </div>
       </div>

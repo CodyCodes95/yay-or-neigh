@@ -78,6 +78,7 @@ model Form {
     submissions Submission[]
     user        User         @relation(fields: [userId], references: [id])
     userId      String
+    startDate   DateTime     @default(now())
     endDate     DateTime
 }
 
