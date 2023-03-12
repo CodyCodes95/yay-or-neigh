@@ -15,6 +15,7 @@ async function seedDb() {
         type: "text",
         formId: form.id,
         required: true,
+        userId: "1",
         order: 0
       },
       {
@@ -22,6 +23,7 @@ async function seedDb() {
         type: "text",
         formId: form.id,
         required: true,
+        userId: "1",
         order: 1
       },
       {
@@ -29,6 +31,7 @@ async function seedDb() {
         type: "text",
         formId: form.id,
         required: true,
+        userId: "1",
         order: 2
       },
       {
@@ -36,6 +39,7 @@ async function seedDb() {
         type: "text",
         formId: form.id,
         required: true,
+        userId: "1",
         order: 3
       },
       {
@@ -43,6 +47,7 @@ async function seedDb() {
         type: "text",
         formId: form.id,
         required: true,
+        userId: "1",
         order: 4
       },
       {
@@ -50,6 +55,7 @@ async function seedDb() {
         type: "text",
         formId: form.id,
         required: true,
+        userId: "1",
         order: 5
       },
       {
@@ -57,6 +63,7 @@ async function seedDb() {
         type: "text",
         formId: form.id,
         required: true,
+        userId: "1",
         order: 6
       },
       {
@@ -64,6 +71,7 @@ async function seedDb() {
         type: "text",
         formId: form.id,
         required: true,
+        userId: "1",
         order: 7
       },
       {
@@ -71,6 +79,7 @@ async function seedDb() {
         type: "text",
         formId: form.id,
         required: true,
+        userId: "1",
         order: 8
       },
       {
@@ -78,6 +87,7 @@ async function seedDb() {
         type: "text",
         formId: form.id,
         required: true,
+        userId: "1",
         order: 9
       },
       {
@@ -85,6 +95,7 @@ async function seedDb() {
         type: "text",
         formId: form.id,
         required: true,
+        userId: "1",
         order: 10
       },
       {
@@ -92,6 +103,7 @@ async function seedDb() {
         type: "text",
         formId: form.id,
         required: false,
+        userId: "1",
         order: 11
       },
       {
@@ -99,6 +111,7 @@ async function seedDb() {
         type: "text",
         formId: form.id,
         required: false,
+        userId: "1",
         order: 12
       },
     ],
