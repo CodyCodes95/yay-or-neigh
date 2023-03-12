@@ -66,14 +66,12 @@ const FormPreferences: React.FC<FormPreferencesProps> = ({ form }) => {
           formIntroEnabled ? "bg-blue-600" : "bg-gray-200"
         } relative inline-flex h-6 w-11 items-center rounded-full`}
       >
-        <span className="sr-only">Enable notifications</span>
         <span
           className={`${
             formIntroEnabled ? "translate-x-6" : "translate-x-1"
           } inline-block h-4 w-4 transform rounded-full bg-white transition`}
         />
       </Switch>
-      
       <input
         className="mr-2 mb-2 cursor-pointer rounded-lg border border-red-700 px-5 py-2.5 text-center text-sm font-medium text-red-700 duration-200 hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900"
         type="submit"
