@@ -8,9 +8,10 @@ const FormContainer: NextPage = () => {
   const { formId } = router.query;
   const form = api.form.getForm.useQuery({ formId: formId as string }, {
     enabled: !!formId,
+    refetchOnWindowFocus: false,
   })
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#15162c] to-[#04050a]">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#333] to-[#04050a]">
       {/* <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 "></div> */}
       {form.data ? <Form form={form.data} /> : null}
     </main>
