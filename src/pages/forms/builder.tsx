@@ -136,7 +136,14 @@ export const SortableItem: React.FC<SortableItemProps> = ({
                       onMouseDown={() => {
                         console.log("clicked");
                         setFields((prev: TemporaryField[]) => {
-                          return prev.filter((f) => f.id !== field.id);
+                          return prev
+                            .filter((f) => f.id !== field.id)
+                            .map((field, i) => {
+                              return {
+                                ...field,
+                                order: i,
+                              };
+                            });
                         });
                       }}
                       className="text-red-600"
@@ -211,6 +218,7 @@ const FormContainer: NextPage = () => {
 
   const createFields = api.fields.createFields.useMutation();
   const updateField = api.fields.updateField.useMutation();
+  const deleteField = api.fields.deleteField.useMutation();
 
   const [fields, setFields] = useState<TemporaryField[]>([]);
 
@@ -248,6 +256,18 @@ const FormContainer: NextPage = () => {
   const onSave = async () => {
     const newFields = fields.filter((field) => field.id.length < 25);
     const oldFields = fields.filter((field) => field.id.length === 25);
+    const deletedFields = form.data?.fields.filter(
+      (field) => !fields.map((f) => f.id).includes(field.id)
+    );
+    if (deletedFields?.length) {
+      await Promise.all(
+        deletedFields.map(async (field) => {
+          await deleteField.mutateAsync({
+            fieldId: field.id,
+          });
+        })
+      );
+    }
     if (oldFields.length) {
       await Promise.all(
         oldFields.map(async (field) => {
@@ -267,7 +287,7 @@ const FormContainer: NextPage = () => {
         formId: formId as string,
       });
     }
-    form.refetch()
+    form.refetch();
   };
 
   useEffect(() => {

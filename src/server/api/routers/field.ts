@@ -21,6 +21,7 @@ export const fieldRouter = createTRPCRouter({
         data: input.fields.map((field) => ({
           ...field,
           formId: input.formId,
+          userId: ctx.session.user.id,
         })),
       });
     }),
@@ -44,6 +45,19 @@ export const fieldRouter = createTRPCRouter({
           type: input.type,
           order: input.order,
           required: input.required,
+        },
+      });
+    }),
+  deleteField: protectedProcedure
+    .input(
+      z.object({
+        fieldId: z.string(),
+      })
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.field.delete({
+        where: {
+          id: input.fieldId,
         },
       });
     }),

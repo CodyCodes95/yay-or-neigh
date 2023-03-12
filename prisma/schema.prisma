@@ -58,6 +58,7 @@ model User {
     accounts      Account[]
     sessions      Session[]
     Form          Form[]
+    Field         Field[]
 }
 
 model VerificationToken {
@@ -90,6 +91,8 @@ model Field {
     formId    String
     required  Boolean
     order     Int
+    user      User     @relation(fields: [userId], references: [id])
+    userId    String
 }
 
 model Submission {
@@ -102,7 +105,7 @@ model Submission {
     data      Json
     Image     Image[]
     deferred  Boolean  @default(false)
-    approved  Boolean? 
+    approved  Boolean?
 }
 
 model Image {
