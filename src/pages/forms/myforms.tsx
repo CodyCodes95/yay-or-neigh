@@ -3,7 +3,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { FaListUl } from "react-icons/fa";
-import { FiGrid, FiLink } from "react-icons/fi";
+import { FiGrid, FiLink, FiSettings } from "react-icons/fi";
+import Spacer from "~/components/Spacer";
 import { api } from "~/utils/api";
 import { getRelativeDays } from "~/utils/formats";
 
@@ -61,17 +62,26 @@ const FormContainer: NextPage = () => {
                   <div className="flex flex-col p-3">
                     <div className="flex w-full items-center justify-between">
                       <h4 className="text-white">{form.name}</h4>
-                      <span
-                        onClick={() => {
-                          navigator.clipboard.writeText(
-                            `${window.location.origin}/forms?formId=${form.id}`
-                          );
-                          toast.success("Copied to clipboard");
-                        }}
-                        className="cursor-pointer rounded-lg bg-[#333] p-2"
-                      >
-                        <FiLink />
-                      </span>
+                      <div className="flex">
+                        <span
+                          onClick={() => {
+                            navigator.clipboard.writeText(
+                              `${window.location.origin}/forms?formId=${form.id}`
+                            );
+                            toast.success("Copied to clipboard");
+                          }}
+                          className="cursor-pointer rounded-lg bg-[#333] p-2"
+                        >
+                          <FiLink />
+                        </span>
+                        <Spacer amount={1} />
+                        <Link
+                          href={`/forms/builder?formId=${form.id}`}
+                          className="cursor-pointer rounded-lg bg-[#333] p-2"
+                        >
+                          <FiSettings />
+                        </Link>
+                      </div>
                     </div>
                     <p className="p-1 text-sm">
                       {form.submissions.length} Submission
@@ -88,7 +98,7 @@ const FormContainer: NextPage = () => {
                     <div className="mt-1 flex w-full justify-around">
                       <Link href={`/forms/judge?formId=${form.id}`}>Judge</Link>
                       <Link href={`/forms/builder?formId=${form.id}`}>
-                        Options
+                        Results
                       </Link>
                       <Link target={"_blank"} href={`/forms?formId=${form.id}`}>
                         Preview
@@ -135,7 +145,7 @@ const FormContainer: NextPage = () => {
                     <div className="mt-1 flex w-full justify-around">
                       <Link href={`/forms/judge?formId=${form.id}`}>Judge</Link>
                       <Link href={`/forms/builder?formId=${form.id}`}>
-                        Options
+                        Results
                       </Link>
                       <Link target={"_blank"} href={`/forms?formId=${form.id}`}>
                         Preview
