@@ -48,7 +48,8 @@ const FormPreferences: React.FC<FormPreferencesProps> = ({ form }) => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <p>
+            {/* dynamically render the sample.js to this */}
+            {/* <p>
               Hey there! Thank you for your interest in displaying your vehicle
               at Status, CH. IV. We encourage you to clearly and sufficiently
               fill in all sections below in order to assist us in selecting a
@@ -108,7 +109,7 @@ const FormPreferences: React.FC<FormPreferencesProps> = ({ form }) => {
               Please don&apos;t hesitate to contact us via Facebook or Instagram
               if you have any questions or concerns!
             </p>
-            <Spacer amount={4} />
+            <Spacer amount={4} /> */}
           </motion.div>
         </div>
       ) : null}
@@ -223,5 +224,6 @@ const FormContainer: NextPage = () => {
     </main>
   );
 };
+
 
 export default FormContainer;
