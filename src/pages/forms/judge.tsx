@@ -1,6 +1,6 @@
 import next, { type NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import ImageCarousel from "~/components/carousel/ImageCarousel";
 import Spacer from "~/components/Spacer";
 import type { SubmissionWithImages } from "~/types/prismaRelations";
