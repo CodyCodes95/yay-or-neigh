@@ -5,7 +5,12 @@ import ImageCarousel from "~/components/carousel/ImageCarousel";
 import Spacer from "~/components/Spacer";
 import type { SubmissionWithImages } from "~/types/prismaRelations";
 import { api } from "~/utils/api";
-import TinderCard from "react-tinder-card";
+// import TinderCard from "react-tinder-card";
+import dynamic from "next/dynamic";
+
+const TinderCard = dynamic(() => import("react-tinder-card"), {
+  ssr: false,
+});
 
 const FormContainer: NextPage = () => {
   const router = useRouter();
