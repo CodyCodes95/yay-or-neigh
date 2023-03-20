@@ -1,12 +1,26 @@
 import next, { type NextPage } from "next";
 import { useRouter } from "next/router";
-import {  useState } from "react";
+import { useState } from "react";
 import ImageCarousel from "~/components/carousel/ImageCarousel";
 import Spacer from "~/components/Spacer";
 import type { SubmissionWithImages } from "~/types/prismaRelations";
 import { api } from "~/utils/api";
-// import TinderCard from "react-tinder-card";
 import dynamic from "next/dynamic";
+import { Image } from "@prisma/client";
+
+type SubmissionData = {
+  fieldId: string;
+  value: string;
+};
+
+type SubmissionJsonFormatted = {
+  email: string;
+  data: any
+  Image: Image[];
+  deferred: boolean;
+  id: string;
+  formId: string;
+};
 
 const TinderCard = dynamic(() => import("react-tinder-card"), {
   ssr: false,
@@ -29,27 +43,36 @@ const FormContainer: NextPage = () => {
       enabled: !!formId,
     }
   );
-  const submissionOne = api.submission.getUnjudgedSubmissions.useQuery(
+  // const submissionOne = api.submission.getUnjudgedSubmissions.useQuery(
+  //   {
+  //     formId: formId as string,
+  //     offset: 0,
+  //   },
+  //   {
+  //     onSuccess: (data) => {
+  //       setCurrentSubmission(data as SubmissionWithImages);
+  //     },
+  //     enabled: !!formId,
+  //   }
+  // );
+  // const submissionTwo = api.submission.getUnjudgedSubmissions.useQuery(
+  //   {
+  //     formId: formId as string,
+  //     offset: 1,
+  //   },
+  //   {
+  //     enabled: false,
+  //   }
+  // );
+
+  const results = api.submission.getAllUnjudgedSubmissions.useQuery(
     {
       formId: formId as string,
-      offset: 0,
     },
     {
-      onSuccess: (data) => {
-        setCurrentSubmission(data as SubmissionWithImages);
-      },
       enabled: !!formId,
     }
-  );
-  const submissionTwo = api.submission.getUnjudgedSubmissions.useQuery(
-    {
-      formId: formId as string,
-      offset: 1,
-    },
-    {
-      enabled: false,
-    }
-  );
+  )
 
   const onSwipe = (direction: any) => {
     console.log("You swiped: " + direction);
@@ -89,7 +112,36 @@ const FormContainer: NextPage = () => {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#111] to-[#04050a] text-gray-500">
       <div className="container flex flex-col items-center gap-12 px-4 py-16 ">
-        {currentSubmission && fields.data ? (
+        {results.data?.map((submission:SubmissionJsonFormatted) => (
+          <>
+            <TinderCard
+              onSwipe={onSwipe}
+              onCardLeftScreen={() => onCardLeftScreen("fooBar")}
+              preventSwipe={["right", "left"]}
+            >
+              <div className="flex max-h-[66vh] w-full items-center rounded-lg bg-[#333] p-4">
+                <ImageCarousel images={submission.Image} />
+                <Spacer amount={2} />
+                <div className="flex max-h-[66vh] w-1/2 flex-col overflow-auto text-white">
+                  <div className="flex items-center justify-center p-2">
+                    <p className="ml-2 text-xl font-bold text-white">
+                      {submission.email}
+                    </p>
+                  </div>
+                  {submission.data?.map((field:SubmissionData) => (
+                    <div className="flex p-2" key={field.fieldId}>
+                      <p className="w-1/4 min-w-[25%] break-words font-medium text-gray-900 dark:text-white">
+                        {fields.data?.find((x) => x.id === field.fieldId)?.name}
+                      </p>
+                      <p className="ml-2 text-gray-400">{field.value}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </TinderCard>
+          </>
+        ))}
+        {/* {currentSubmission && fields.data ? (
           <>
             <TinderCard
               onSwipe={onSwipe}
@@ -117,11 +169,11 @@ const FormContainer: NextPage = () => {
               </div>
             </TinderCard>
           </>
-        ) : (
-          <div className="fixed left-0 top-0 flex h-[screen] w-screen items-center justify-center bg-gradient-to-b from-[#111] to-[#04050a]">
-            <div className="h-32 w-32 animate-spin rounded-full border-t-2 border-b-2 border-white"></div>
-          </div>
-        )}
+        ) : ( */}
+
+        {/* <div className="fixed left-0 top-0 flex min-h-screen w-screen items-center justify-center bg-gradient-to-b from-[#1111112c] to-[#04050a88]">
+           <div className="h-32 w-32 animate-spin rounded-full border-t-2 border-b-2 border-white"></div>
+          </div> */}
         <div className=" flex w-1/6 flex-col justify-around">
           <div className="flex w-full justify-between">
             <button className="mr-2 mb-2 rounded-lg border border-red-700 px-5 py-2.5 text-center text-sm font-medium text-red-700 hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900">

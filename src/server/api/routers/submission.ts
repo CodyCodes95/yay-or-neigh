@@ -46,6 +46,9 @@ export const submissionRouter = createTRPCRouter({
           approved: null,
           deferred: false,
         },
+        include: {
+          Image: true,
+        },
         orderBy: {
           createdAt: "asc",
         },
