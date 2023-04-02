@@ -1,6 +1,6 @@
 import next, { type NextPage } from "next";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { createRef, useMemo, useState } from "react";
 import ImageCarousel from "~/components/carousel/ImageCarousel";
 import Spacer from "~/components/Spacer";
 import type { SubmissionWithImages } from "~/types/prismaRelations";
@@ -43,6 +43,7 @@ const FormContainer: NextPage = () => {
       enabled: !!formId,
     }
   );
+  
   // const submissionOne = api.submission.getUnjudgedSubmissions.useQuery(
   //   {
   //     formId: formId as string,
@@ -73,6 +74,15 @@ const FormContainer: NextPage = () => {
       enabled: !!formId,
     }
   )
+
+    const childRefs = useMemo(
+      () =>
+        Array(results.data?.length)
+          .fill(0)
+          .map((i) => createRef()),
+      [results.data]
+    );
+
 
   const onSwipe = (direction: any) => {
     console.log("You swiped: " + direction);
@@ -112,9 +122,10 @@ const FormContainer: NextPage = () => {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#111] to-[#04050a] text-gray-500">
       <div className="container flex flex-col items-center gap-12 px-4 py-16 ">
-        {results.data?.map((submission:SubmissionJsonFormatted) => (
+        {results.data?.map((submission:SubmissionJsonFormatted, i) => (
           <>
             <TinderCard
+            ref={childRefs[i] as any}
               onSwipe={onSwipe}
               onCardLeftScreen={() => onCardLeftScreen("fooBar")}
               preventSwipe={["right", "left"]}
