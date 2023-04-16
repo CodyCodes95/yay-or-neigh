@@ -22,10 +22,6 @@ type SubmissionJsonFormatted = {
   formId: string;
 };
 
-const TinderCard = dynamic(() => import("react-tinder-card"), {
-  ssr: false,
-});
-
 const FormContainer: NextPage = () => {
   const router = useRouter();
   const { formId } = router.query;
@@ -75,23 +71,6 @@ const FormContainer: NextPage = () => {
     }
   )
 
-    const childRefs = useMemo(
-      () =>
-        Array(results.data?.length)
-          .fill(0)
-          .map((i) => createRef()),
-      [results.data]
-    );
-
-
-  const onSwipe = (direction: any) => {
-    console.log("You swiped: " + direction);
-  };
-
-  const onCardLeftScreen = (myIdentifier: any) => {
-    console.log(myIdentifier + " left the screen");
-  };
-
   // useEffect(() => {
   //   if (formId) {
   //     submissionOne.refetch();
@@ -123,64 +102,8 @@ const FormContainer: NextPage = () => {
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#111] to-[#04050a] text-gray-500">
       <div className="container flex flex-col items-center gap-12 px-4 py-16 ">
         {results.data?.map((submission:SubmissionJsonFormatted, i) => (
-          <>
-            <TinderCard
-            ref={childRefs[i] as any}
-              onSwipe={onSwipe}
-              onCardLeftScreen={() => onCardLeftScreen("fooBar")}
-              preventSwipe={["right", "left"]}
-            >
-              <div className="flex max-h-[66vh] w-full items-center rounded-lg bg-[#333] p-4">
-                <ImageCarousel images={submission.Image} />
-                <Spacer amount={2} />
-                <div className="flex max-h-[66vh] w-1/2 flex-col overflow-auto text-white">
-                  <div className="flex items-center justify-center p-2">
-                    <p className="ml-2 text-xl font-bold text-white">
-                      {submission.email}
-                    </p>
-                  </div>
-                  {submission.data?.map((field:SubmissionData) => (
-                    <div className="flex p-2" key={field.fieldId}>
-                      <p className="w-1/4 min-w-[25%] break-words font-medium text-gray-900 dark:text-white">
-                        {fields.data?.find((x) => x.id === field.fieldId)?.name}
-                      </p>
-                      <p className="ml-2 text-gray-400">{field.value}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </TinderCard>
-          </>
+          <div>res</div>
         ))}
-        {/* {currentSubmission && fields.data ? (
-          <>
-            <TinderCard
-              onSwipe={onSwipe}
-              onCardLeftScreen={() => onCardLeftScreen("fooBar")}
-              preventSwipe={["right", "left"]}
-            >
-              <div className="flex max-h-[66vh] w-full items-center rounded-lg bg-[#333] p-4">
-                <ImageCarousel images={currentSubmission.Image} />
-                <Spacer amount={2} />
-                <div className="flex max-h-[66vh] w-1/2 flex-col overflow-auto text-white">
-                  <div className="flex items-center justify-center p-2">
-                    <p className="ml-2 text-xl font-bold text-white">
-                      {currentSubmission.email}
-                    </p>
-                  </div>
-                  {currentSubmission.data.map((field) => (
-                    <div className="flex p-2" key={field.fieldId}>
-                      <p className="w-1/4 min-w-[25%] break-words font-medium text-gray-900 dark:text-white">
-                        {fields.data.find((x) => x.id === field.fieldId)?.name}
-                      </p>
-                      <p className="ml-2 text-gray-400">{field.value}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </TinderCard>
-          </>
-        ) : ( */}
 
         {/* <div className="fixed left-0 top-0 flex min-h-screen w-screen items-center justify-center bg-gradient-to-b from-[#1111112c] to-[#04050a88]">
            <div className="h-32 w-32 animate-spin rounded-full border-t-2 border-b-2 border-white"></div>
