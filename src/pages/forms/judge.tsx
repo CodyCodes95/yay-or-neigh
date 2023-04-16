@@ -95,7 +95,7 @@ const FormContainer: NextPage = () => {
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#111] to-[#04050a] text-gray-500">
       <div className="container flex flex-col items-center gap-12 px-4 py-16 ">
         <p>{currentIndex}</p>
-        {submissions.data?.length ? (
+        {submissions.data?.length && submissions.isFetched ? (
           <div className="flex max-h-[66vh] w-full items-center rounded-lg bg-[#333] p-4">
             <ImageCarousel images={submissions.data[currentIndex]?.Image} />
             <Spacer amount={2} />

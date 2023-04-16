@@ -39,7 +39,7 @@ const Nav = () => {
                   <Menu.Item>
                     {({ active }) => (
                       <Link
-                        className={` flex w-full items-center rounded-lg p-2 duration-150 ${
+                        className={` flex w-full items-center rounded-lg p-2 ${
                           active ? "bg-blue-500" : "bg-gray-600"
                         }`}
                         href="/forms/myforms"
@@ -52,7 +52,7 @@ const Nav = () => {
                   <Menu.Item>
                     {({ active }) => (
                       <button
-                        className={` flex w-full cursor-pointer items-center rounded-lg p-2 duration-150 ${
+                        className={` flex w-full cursor-pointer items-center rounded-lg p-2 ${
                           active ? "bg-blue-500" : "bg-gray-600"
                         }`}
                         onClick={() => void signOut()}
