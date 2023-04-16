@@ -26,7 +26,7 @@ const FormContainer: NextPage = () => {
   const { formId } = router.query;
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [currentFeildValues, setCurrentFeildValues] = useState<any>([]);
+  const [currentFieldValues, setCurrentFieldValues] = useState<any>([]);
 
   const fields = api.form.getFields.useQuery(
     {
@@ -80,14 +80,14 @@ const FormContainer: NextPage = () => {
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
     }
-  }
+  };
 
   useEffect(() => {
     if (
       typeof submissions?.data === "object" &&
       Array.isArray(submissions?.data)
     ) {
-      setCurrentFeildValues(submissions.data[currentIndex]?.data);
+      setCurrentFieldValues(submissions.data[currentIndex]?.data);
     }
   }, [submissions, currentIndex]);
 
@@ -95,7 +95,7 @@ const FormContainer: NextPage = () => {
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#111] to-[#04050a] text-gray-500">
       <div className="container flex flex-col items-center gap-12 px-4 py-16 ">
         <p>{currentIndex}</p>
-        {submissions.data && (
+        {submissions.data?.length ? (
           <div className="flex max-h-[66vh] w-full items-center rounded-lg bg-[#333] p-4">
             <ImageCarousel images={submissions.data[currentIndex]?.Image} />
             <Spacer amount={2} />
@@ -108,7 +108,7 @@ const FormContainer: NextPage = () => {
                   {submissions.data[currentIndex]?.email}
                 </p>
               </div>
-              {currentFeildValues.map((field: SubmissionData) => (
+              {currentFieldValues?.map((field: SubmissionData) => (
                 <div className="flex p-2" key={field.fieldId}>
                   <p className="w-1/4 min-w-[25%] break-words font-medium text-gray-900 dark:text-white">
                     {fields.data?.find((x) => x.id === field.fieldId)?.name}
@@ -118,6 +118,8 @@ const FormContainer: NextPage = () => {
               ))}
             </div>
           </div>
+        ) : (
+          <p>No Submissions</p>
         )}
         <div className=" flex w-1/6 flex-col justify-around">
           <div className="flex w-full justify-between">
@@ -139,7 +141,10 @@ const FormContainer: NextPage = () => {
             </button>
           </div>
           <Spacer amount={3} />
-          <button className="mr-2 mb-2 rounded-lg border border-gray-800 px-5 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-gray-300 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-800">
+          <button
+            onClick={onDefer}
+            className="mr-2 mb-2 rounded-lg border border-gray-800 px-5 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-gray-300 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-800"
+          >
             Defer
           </button>
         </div>
