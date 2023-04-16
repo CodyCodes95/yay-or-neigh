@@ -55,31 +55,66 @@ export const submissionRouter = createTRPCRouter({
       });
       return submissions;
     }),
-  getUnjudgedSubmissions: protectedProcedure
+  judgeSubmission: protectedProcedure
     .input(
       z.object({
-        formId: z.string(),
-        offset: z.number(),
+        submissionId: z.string(),
+        approved: z.boolean(),
       })
     )
-    .query(async ({ ctx, input }) => {
-      const submissions = await ctx.prisma.submission.findFirst({
+    .mutation(async ({ ctx, input }) => {
+      const submission = await ctx.prisma.submission.update({
         where: {
-          form: {
-            userId: ctx.session.user.id,
-            id: input.formId,
-          },
-          approved: null,
-          deferred: false,
+          id: input.submissionId,
         },
-        include: {
-          Image: true,
+        data: {
+          approved: input.approved,
         },
-        orderBy: {
-          createdAt: "asc",
-        },
-        skip: input.offset,
       });
-      return submissions;
+      return submission;
     }),
+  deferSubmission: protectedProcedure
+    .input(
+      z.object({
+        submissionId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const submission = await ctx.prisma.submission.update({
+        where: {
+          id: input.submissionId,
+        },
+        data: {
+          deferred: true,
+        },
+      });
+      return submission;
+    }),
+  // getUnjudgedSubmissions: protectedProcedure
+  //   .input(
+  //     z.object({
+  //       formId: z.string(),
+  //       offset: z.number(),
+  //     })
+  //   )
+  //   .query(async ({ ctx, input }) => {
+  //     const submissions = await ctx.prisma.submission.findFirst({
+  //       where: {
+  //         form: {
+  //           userId: ctx.session.user.id,
+  //           id: input.formId,
+  //         },
+  //         approved: null,
+  //         deferred: false,
+  //       },
+  //       include: {
+  //         Image: true,
+  //       },
+  //       orderBy: {
+  //         createdAt: "asc",
+  //       },
+  //       skip: input.offset,
+  //     });
+  //     return submissions;
+  //   }),
 });
