@@ -24,12 +24,7 @@ type SubmissionJsonFormatted = {
 const FormContainer: NextPage = () => {
   const router = useRouter();
   const { formId } = router.query;
-  const [currentSubmission, setCurrentSubmission] =
-    useState<SubmissionWithImages | null>(null);
-  const [previousSubmission, setPreviousSubmission] =
-    useState<SubmissionWithImages | null>(null);
-  const [nextSubmission, setNextSubmission] =
-    useState<SubmissionWithImages | null>(null);
+
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [currentFeildValues, setCurrentFeildValues] = useState<any>([]);
 
@@ -39,6 +34,7 @@ const FormContainer: NextPage = () => {
     },
     {
       enabled: !!formId,
+      refetchOnWindowFocus: false,
     }
   );
 
@@ -48,8 +44,43 @@ const FormContainer: NextPage = () => {
     },
     {
       enabled: !!formId,
+      refetchOnWindowFocus: false,
     }
   );
+
+  const judgeSubmission = api.submission.judgeSubmission.useMutation();
+  const deferSubmission = api.submission.deferSubmission.useMutation();
+
+  const onJudge = (isApproved: boolean) => {
+    if (submissions.data?.[currentIndex]) {
+      const currentSubmission = submissions.data[currentIndex];
+      if (currentSubmission) {
+        judgeSubmission.mutate({
+          submissionId: currentSubmission.id,
+          isApproved,
+        });
+        setCurrentIndex(currentIndex + 1);
+      }
+    }
+  };
+
+  const onDefer = () => {
+    if (submissions.data?.[currentIndex]) {
+      const currentSubmission = submissions.data[currentIndex];
+      if (currentSubmission) {
+        deferSubmission.mutate({
+          submissionId: currentSubmission.id,
+        });
+        setCurrentIndex(currentIndex + 1);
+      }
+    }
+  };
+
+  const undo = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  }
 
   useEffect(() => {
     if (
@@ -58,7 +89,7 @@ const FormContainer: NextPage = () => {
     ) {
       setCurrentFeildValues(submissions.data[currentIndex]?.data);
     }
-  }, [submissions]);
+  }, [submissions, currentIndex]);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#111] to-[#04050a] text-gray-500">
@@ -70,6 +101,9 @@ const FormContainer: NextPage = () => {
             <Spacer amount={2} />
             <div className="flex max-h-[66vh] w-1/2 flex-col overflow-auto text-white">
               <div className="flex items-center justify-center p-2">
+                <p className="ml-2 text-xl font-bold text-white">
+                  {submissions.data[currentIndex]?.id}
+                </p>
                 <p className="ml-2 text-xl font-bold text-white">
                   {submissions.data[currentIndex]?.email}
                 </p>
@@ -87,10 +121,20 @@ const FormContainer: NextPage = () => {
         )}
         <div className=" flex w-1/6 flex-col justify-around">
           <div className="flex w-full justify-between">
-            <button className="mr-2 mb-2 rounded-lg border border-red-700 px-5 py-2.5 text-center text-sm font-medium text-red-700 hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900">
+            <button
+              onClick={() => {
+                onJudge(false);
+              }}
+              className="mr-2 mb-2 rounded-lg border border-red-700 px-5 py-2.5 text-center text-sm font-medium text-red-700 hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900"
+            >
               No
             </button>
-            <button className="mr-2 mb-2 rounded-lg border border-green-700 px-5 py-2.5 text-center text-sm font-medium text-green-700 hover:bg-green-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-green-300 dark:border-green-500 dark:text-green-500 dark:hover:bg-green-600 dark:hover:text-white dark:focus:ring-green-800">
+            <button
+              onClick={() => {
+                onJudge(true);
+              }}
+              className="mr-2 mb-2 rounded-lg border border-green-700 px-5 py-2.5 text-center text-sm font-medium text-green-700 hover:bg-green-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-green-300 dark:border-green-500 dark:text-green-500 dark:hover:bg-green-600 dark:hover:text-white dark:focus:ring-green-800"
+            >
               Yes
             </button>
           </div>

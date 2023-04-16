@@ -59,7 +59,7 @@ export const submissionRouter = createTRPCRouter({
     .input(
       z.object({
         submissionId: z.string(),
-        approved: z.boolean(),
+        isApproved: z.boolean(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -68,7 +68,7 @@ export const submissionRouter = createTRPCRouter({
           id: input.submissionId,
         },
         data: {
-          approved: input.approved,
+          approved: input.isApproved,
         },
       });
       return submission;
