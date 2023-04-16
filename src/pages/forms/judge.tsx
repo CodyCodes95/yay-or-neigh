@@ -1,12 +1,11 @@
 import next, { type NextPage } from "next";
 import { useRouter } from "next/router";
-import { createRef, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import ImageCarousel from "~/components/carousel/ImageCarousel";
 import Spacer from "~/components/Spacer";
 import type { SubmissionWithImages } from "~/types/prismaRelations";
 import { api } from "~/utils/api";
-import dynamic from "next/dynamic";
-import type { Image } from "@prisma/client";
+import type { Image, Prisma } from "@prisma/client";
 
 type SubmissionData = {
   fieldId: string;
@@ -31,6 +30,9 @@ const FormContainer: NextPage = () => {
     useState<SubmissionWithImages | null>(null);
   const [nextSubmission, setNextSubmission] =
     useState<SubmissionWithImages | null>(null);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [currentFeildValues, setCurrentFeildValues] = useState<any>([]);
+
   const fields = api.form.getFields.useQuery(
     {
       formId: formId as string,
@@ -40,29 +42,7 @@ const FormContainer: NextPage = () => {
     }
   );
 
-  // const submissionOne = api.submission.getUnjudgedSubmissions.useQuery(
-  //   {
-  //     formId: formId as string,
-  //     offset: 0,
-  //   },
-  //   {
-  //     onSuccess: (data) => {
-  //       setCurrentSubmission(data as SubmissionWithImages);
-  //     },
-  //     enabled: !!formId,
-  //   }
-  // );
-  // const submissionTwo = api.submission.getUnjudgedSubmissions.useQuery(
-  //   {
-  //     formId: formId as string,
-  //     offset: 1,
-  //   },
-  //   {
-  //     enabled: false,
-  //   }
-  // );
-
-  const results = api.submission.getAllUnjudgedSubmissions.useQuery(
+  const submissions = api.submission.getAllUnjudgedSubmissions.useQuery(
     {
       formId: formId as string,
     },
@@ -71,43 +51,40 @@ const FormContainer: NextPage = () => {
     }
   );
 
-  // useEffect(() => {
-  //   if (formId) {
-  //     submissionOne.refetch();
-  //     submissionTwo.refetch();
-  //   }
-  // }, [formId]);
-
-  // useEffect(() => {
-  //   if (currentSubmission === null && submissionOne.data) {
-  //     setCurrentSubmission(submissionOne.data as SubmissionWithImages);
-  //   }
-  // }, [submissionOne, currentSubmission]);
-  // // useEffect(() => {
-  // //   if (
-  // //     currentSubmission === null &&
-  // //     submissionOne.data &&
-  // //     submissionTwo.data
-  // //   ) {
-  // //     setCurrentSubmission(submissionOne.data as SubmissionWithImages);
-  // //     setNextSubmission(submissionTwo.data as SubmissionWithImages);
-  // //   }
-  // // }, [submissionOne, submissionTwo, currentSubmission]);
-
-  // useEffect(() => {
-  //   console.log(previousSubmission, currentSubmission, nextSubmission);
-  // }, [previousSubmission, currentSubmission, nextSubmission]);
+  useEffect(() => {
+    if (
+      typeof submissions?.data === "object" &&
+      Array.isArray(submissions?.data)
+    ) {
+      setCurrentFeildValues(submissions.data[currentIndex]?.data);
+    }
+  }, [submissions]);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#111] to-[#04050a] text-gray-500">
       <div className="container flex flex-col items-center gap-12 px-4 py-16 ">
-        {results.data?.map((submission: SubmissionJsonFormatted, i) => (
-          <div key={i}>res</div>
-        ))}
-
-        {/* <div className="fixed left-0 top-0 flex min-h-screen w-screen items-center justify-center bg-gradient-to-b from-[#1111112c] to-[#04050a88]">
-           <div className="h-32 w-32 animate-spin rounded-full border-t-2 border-b-2 border-white"></div>
-          </div> */}
+        <p>{currentIndex}</p>
+        {submissions.data && (
+          <div className="flex max-h-[66vh] w-full items-center rounded-lg bg-[#333] p-4">
+            <ImageCarousel images={submissions.data[currentIndex]?.Image} />
+            <Spacer amount={2} />
+            <div className="flex max-h-[66vh] w-1/2 flex-col overflow-auto text-white">
+              <div className="flex items-center justify-center p-2">
+                <p className="ml-2 text-xl font-bold text-white">
+                  {submissions.data[currentIndex]?.email}
+                </p>
+              </div>
+              {currentFeildValues.map((field: SubmissionData) => (
+                <div className="flex p-2" key={field.fieldId}>
+                  <p className="w-1/4 min-w-[25%] break-words font-medium text-gray-900 dark:text-white">
+                    {fields.data?.find((x) => x.id === field.fieldId)?.name}
+                  </p>
+                  <p className="ml-2 text-gray-400">{field.value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         <div className=" flex w-1/6 flex-col justify-around">
           <div className="flex w-full justify-between">
             <button className="mr-2 mb-2 rounded-lg border border-red-700 px-5 py-2.5 text-center text-sm font-medium text-red-700 hover:bg-red-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900">

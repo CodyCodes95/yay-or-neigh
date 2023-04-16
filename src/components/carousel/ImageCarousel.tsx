@@ -8,7 +8,7 @@ import {
 } from "../../components/carousel/EmblaCarouselArrowsDotsButtons";
 
 type ImageCarouselProps = {
-  images: Image[];
+  images: Image[] | undefined;
 };
 
 const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
@@ -49,7 +49,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
   return (
     <div className="embla w-2/3" ref={carouselRef}>
       <div className="embla__container">
-        {images.map((image) => (
+        {images?.map((image) => (
           <img
             key={image.id}
             className=" embla__slide max-h-[50vh] object-cover"
