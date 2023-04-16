@@ -6,7 +6,7 @@ import Spacer from "~/components/Spacer";
 import type { SubmissionWithImages } from "~/types/prismaRelations";
 import { api } from "~/utils/api";
 import dynamic from "next/dynamic";
-import { Image } from "@prisma/client";
+import type { Image } from "@prisma/client";
 
 type SubmissionData = {
   fieldId: string;
@@ -15,7 +15,7 @@ type SubmissionData = {
 
 type SubmissionJsonFormatted = {
   email: string;
-  data: any
+  data: any;
   Image: Image[];
   deferred: boolean;
   id: string;
@@ -39,7 +39,7 @@ const FormContainer: NextPage = () => {
       enabled: !!formId,
     }
   );
-  
+
   // const submissionOne = api.submission.getUnjudgedSubmissions.useQuery(
   //   {
   //     formId: formId as string,
@@ -69,7 +69,7 @@ const FormContainer: NextPage = () => {
     {
       enabled: !!formId,
     }
-  )
+  );
 
   // useEffect(() => {
   //   if (formId) {
@@ -101,8 +101,8 @@ const FormContainer: NextPage = () => {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#111] to-[#04050a] text-gray-500">
       <div className="container flex flex-col items-center gap-12 px-4 py-16 ">
-        {results.data?.map((submission:SubmissionJsonFormatted, i) => (
-          <div>res</div>
+        {results.data?.map((submission: SubmissionJsonFormatted, i) => (
+          <div key={i}>res</div>
         ))}
 
         {/* <div className="fixed left-0 top-0 flex min-h-screen w-screen items-center justify-center bg-gradient-to-b from-[#1111112c] to-[#04050a88]">
