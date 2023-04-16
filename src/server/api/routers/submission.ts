@@ -90,6 +90,26 @@ export const submissionRouter = createTRPCRouter({
       });
       return submission;
     }),
+  getAllSubmissions: protectedProcedure
+    .input(
+      z.object({
+        formId: z.string(),
+      })
+  )
+    .query(async ({ ctx, input }) => {
+      const submissions = await ctx.prisma.submission.findMany({
+        where: {
+          form: {
+            userId: ctx.session.user.id,
+            id: input.formId,
+          },
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
+      });
+      return submissions;
+    }),
   // getUnjudgedSubmissions: protectedProcedure
   //   .input(
   //     z.object({
