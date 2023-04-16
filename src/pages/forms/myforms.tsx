@@ -59,7 +59,7 @@ const FormContainer: NextPage = () => {
                   key={form.id}
                   className="flex flex-col rounded-md border-2 border-[#333] bg-black"
                 >
-                  <div className="flex flex-col p-3">
+                  <div className="flex h-44 flex-col p-3">
                     <div className="flex w-full items-center justify-between">
                       <h4 className="text-white">{form.name}</h4>
                       <div className="flex">
@@ -95,12 +95,24 @@ const FormContainer: NextPage = () => {
                         Closes {getRelativeDays(form.endDate)}
                       </p>
                     </div>
-                    <div className="mt-1 flex w-full justify-around">
-                      <Link href={`/forms/judge?formId=${form.id}`}>Judge</Link>
-                      <Link href={`/forms/builder?formId=${form.id}`}>
+                    <div className="mt-1 flex h-full w-full items-center justify-around py-2">
+                      <Link
+                        className="p-2 hover:bg-[#333] duration-100"
+                        href={`/forms/judge?formId=${form.id}`}
+                      >
+                        Judge
+                      </Link>
+                      <Link
+                        className="p-2 hover:bg-[#333] duration-100"
+                        href={`/forms/builder?formId=${form.id}`}
+                      >
                         Results
                       </Link>
-                      <Link target={"_blank"} href={`/forms?formId=${form.id}`}>
+                      <Link
+                        className="p-2 hover:bg-[#333] duration-100"
+                        target={"_blank"}
+                        href={`/forms?formId=${form.id}`}
+                      >
                         Preview
                       </Link>
                     </div>
@@ -115,7 +127,7 @@ const FormContainer: NextPage = () => {
                   key={form.id}
                   className="flex flex-col rounded-md border-2 border-[#333] bg-black"
                 >
-                  <div className="flex flex-col p-3">
+                  <div className="flex h-44 flex-col p-3">
                     <div className="flex w-full items-center justify-between">
                       <h4 className="text-white">{form.name}</h4>
                       <span
@@ -142,7 +154,7 @@ const FormContainer: NextPage = () => {
                         Closes {getRelativeDays(form.endDate)}
                       </p>
                     </div>
-                    <div className="mt-1 flex w-full justify-around">
+                    <div className="mt-1 flex h-full w-full items-center justify-around">
                       <Link href={`/forms/judge?formId=${form.id}`}>Judge</Link>
                       <Link href={`/forms/builder?formId=${form.id}`}>
                         Results
