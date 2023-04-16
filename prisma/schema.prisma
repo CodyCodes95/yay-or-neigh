@@ -59,6 +59,7 @@ model User {
     sessions      Session[]
     Form          Form[]
     Field         Field[]
+    isAdmin       Boolean   @default(false)
 }
 
 model VerificationToken {
