@@ -104,6 +104,9 @@ export const submissionRouter = createTRPCRouter({
             id: input.formId,
           },
         },
+        include: {
+          Image: true,
+        },
         orderBy: {
           createdAt: "asc",
         },
