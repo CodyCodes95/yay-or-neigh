@@ -103,9 +103,6 @@ const FormContainer: NextPage = () => {
               <div className="flex max-h-[66vh] w-1/2 flex-col overflow-auto text-white">
                 <div className="flex items-center justify-center p-2">
                   <p className="ml-2 text-xl font-bold text-white">
-                    {submissions.data[currentIndex]?.id}
-                  </p>
-                  <p className="ml-2 text-xl font-bold text-white">
                     {submissions.data[currentIndex]?.email}
                   </p>
                 </div>

@@ -45,7 +45,7 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
 
   return (
     <div>
-      <div className="flex w-full justify-between">
+      <div className="flex w-full justify-between items-center">
         <div className="relative">
           <Menu>
             <Menu.Button className="p-1">
@@ -74,20 +74,22 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
         </div>
         <input
           type="text"
+          className="py-1"
+          placeholder="Search..."
           value={globalFilter}
           onChange={(e) => setGlobalFilter(e.target.value)}
         />
       </div>
       <table
-        className="w-full text-left text-sm text-gray-500 dark:text-gray-400"
+        className="w-full text-left text-sm text-gray-500 dark:text-white"
         {...getTableProps()}
       >
-        <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+        <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-[#212121] dark:text-gray-400">
           {headerGroups.map((headerGroup, i) => (
             <tr {...headerGroup.getHeaderGroupProps()} key={i}>
               {headerGroup.headers.map((column, i) => (
                 <th
-                  className="px-6 py-3"
+                  className="px-6 py-3 text-center"
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                   key={i}
                 >
@@ -109,7 +111,7 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
             prepareRow(row);
             return (
               <tr
-                className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
+                className="border-b bg-white text-center dark:border-gray-700 dark:bg-[#333]"
                 {...row.getRowProps()}
                 key={i}
               >

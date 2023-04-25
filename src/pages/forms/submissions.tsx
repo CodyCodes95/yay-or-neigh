@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import type { Column } from "react-table";
 import Table from "~/components/Table";
 import { api } from "~/utils/api";
+import { FaWpforms } from "react-icons/fa";
 
 const JudgedSubmissions = () => {
   const router = useRouter();
@@ -25,13 +26,38 @@ const JudgedSubmissions = () => {
         Header: "Email",
         accessor: "email",
       },
+      {
+        Header: "Result",
+        accessor: "approved",
+        Cell: ({ value }) => {
+          if (value === null) {
+            return <p>Pending</p>;
+          }
+          return value ? (
+            <p className="text-green-500">Approved</p>
+          ) : (
+            <p className="text-red-500">Rejected</p>
+          );
+        },
+      },
+      {
+        Header: "Submission Date",
+        accessor: (d) => new Date(d.createdAt).toLocaleDateString(),
+      },
+      {
+        Header: "Submission",
+        accessor: (d) => (
+            <FaWpforms className="text-white w-5 cursor-pointer h-5 inline"/>
+
+        ),
+      },
     ],
     []
   );
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#111] to-[#04050a] text-gray-500">
-      <div className="container flex flex-col items-center gap-12 px-4 py-16 ">
+    <main className="flex min-h-screen flex-col items-center  bg-gradient-to-b from-[#111] to-[#04050a] text-gray-500">
+      <div className="container flex flex-col gap-12 px-4 py-16 ">
         {submissions.data?.length && (
           <Table data={submissions.data} columns={columns} />
         )}
